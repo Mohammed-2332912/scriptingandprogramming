@@ -1,260 +1,192 @@
-C:\Users\User.DESKTOP-OH2P1D8\PyCharmMiscProject\.venv\Scripts\python.exe C:\Users\User.DESKTOP-OH2P1D8\PyCharmMiscProject\script.py 
+import json
+import os
+import uuid
+from datetime import datetime
 
-====== BRIGHT MIND Academic Booking System ======
-1. View Equipment
-2. Book Equipment
-3. View All Bookings
-4. Return Equipment
-5. View Late Returns
-6. Exit
-Select an option (1-6): 1
+BOOKINGS_FILE = "bookings.json"
 
---- Available Equipment ---
-1. Laptop A
-2. Laptop B
-3. Projector 1
-4. Projector 2
-5. DSLR Camera 1
-6. DSLR Camera 2
-7. Tripod Stand
-8. Audio Recorder
-9. Microphone Kit
-10. Digital Tablet A
-11. Digital Tablet B
-12. VR Headset
-13. 3D Printer
-14. Scientific Calculator A
-15. Scientific Calculator B
-16. Graphing Tablet
-17. LED Light Panel
-18. Portable Monitor
-19. Bluetooth Keyboard
-20. Portable Hard Drive
+# --- Equipment List ---
+equipment_list = [
+    "Laptop A", "Laptop B", "Projector 1", "Projector 2", "DSLR Camera 1",
+    "DSLR Camera 2", "Tripod Stand", "Audio Recorder", "Microphone Kit",
+    "Digital Tablet A", "Digital Tablet B", "VR Headset", "3D Printer",
+    "Scientific Calculator A", "Scientific Calculator B", "Graphing Tablet",
+    "LED Light Panel", "Portable Monitor", "Bluetooth Keyboard",
+    "Portable Hard Drive"
+]
 
-====== BRIGHT MIND Academic Booking System ======
-1. View Equipment
-2. Book Equipment
-3. View All Bookings
-4. Return Equipment
-5. View Late Returns
-6. Exit
-Select an option (1-6): 1
+# --- Loading and Saving Data Functions ---
+def load_bookings():
+    if not os.path.exists(BOOKINGS_FILE):
+        return []
+    with open(BOOKINGS_FILE, "r") as f:
+        return json.load(f)
 
---- Available Equipment ---
-1. Laptop A
-2. Laptop B
-3. Projector 1
-4. Projector 2
-5. DSLR Camera 1
-6. DSLR Camera 2
-7. Tripod Stand
-8. Audio Recorder
-9. Microphone Kit
-10. Digital Tablet A
-11. Digital Tablet B
-12. VR Headset
-13. 3D Printer
-14. Scientific Calculator A
-15. Scientific Calculator B
-16. Graphing Tablet
-17. LED Light Panel
-18. Portable Monitor
-19. Bluetooth Keyboard
-20. Portable Hard Drive
+def save_bookings(bookings):
+    with open(BOOKINGS_FILE, "w") as f:
+        json.dump(bookings, f, indent=4)
 
-====== BRIGHT MIND Academic Booking System ======
-1. View Equipment
-2. Book Equipment
-3. View All Bookings
-4. Return Equipment
-5. View Late Returns
-6. Exit
-Select an option (1-6): 1
+# --- Menu Functions ---
+def view_equipment():
+    print("\n--- Available Equipment ---")
+    for i, item in enumerate(equipment_list, start=1):
+        print(f"{i}. {item}")
 
---- Available Equipment ---
-1. Laptop A
-2. Laptop B
-3. Projector 1
-4. Projector 2
-5. DSLR Camera 1
-6. DSLR Camera 2
-7. Tripod Stand
-8. Audio Recorder
-9. Microphone Kit
-10. Digital Tablet A
-11. Digital Tablet B
-12. VR Headset
-13. 3D Printer
-14. Scientific Calculator A
-15. Scientific Calculator B
-16. Graphing Tablet
-17. LED Light Panel
-18. Portable Monitor
-19. Bluetooth Keyboard
-20. Portable Hard Drive
+# --- Booking Function ---
+def book_equipment(bookings):
+    print("\n--- Book Equipment ---")
+    view_equipment()
 
-====== BRIGHT MIND Academic Booking System ======
-1. View Equipment
-2. Book Equipment
-3. View All Bookings
-4. Return Equipment
-5. View Late Returns
-6. Exit
-Select an option (1-6): 2
+    try:
+        choice = int(input("\nSelect equipment number to book: "))
+    except ValueError:
+        print("Invalid input. Please enter a number.")
+        return
 
---- Book Equipment ---
+    if choice < 1 or choice > len(equipment_list):
+        print("Invalid selection.")
+        return
 
---- Available Equipment ---
-1. Laptop A
-2. Laptop B
-3. Projector 1
-4. Projector 2
-5. DSLR Camera 1
-6. DSLR Camera 2
-7. Tripod Stand
-8. Audio Recorder
-9. Microphone Kit
-10. Digital Tablet A
-11. Digital Tablet B
-12. VR Headset
-13. 3D Printer
-14. Scientific Calculator A
-15. Scientific Calculator B
-16. Graphing Tablet
-17. LED Light Panel
-18. Portable Monitor
-19. Bluetooth Keyboard
-20. Portable Hard Drive
+    selected_item = equipment_list[choice - 1]
 
-Select equipment number to book: laptop1
-Invalid input. Please enter a number.
+    first = input("First Name: ").strip()
+    last = input("Last Name: ").strip()
 
-====== BRIGHT MIND Academic Booking System ======
-1. View Equipment
-2. Book Equipment
-3. View All Bookings
-4. Return Equipment
-5. View Late Returns
-6. Exit
-Select an option (1-6): 2
+    # Automatically generate booking ID
+    booking_id = "BK" + str(uuid.uuid4())[:8].upper()
 
+    # Validate booking date
+    while True:
+        date_booked = input("Date of Booking (YYYY-MM-DD): ").strip()
+        try:
+            datetime.strptime(date_booked, "%Y-%m-%d")
+            break
+        except ValueError:
+            print("Invalid date format. Please enter the date as YYYY-MM-DD.")
 
---- Book Equipment ---
+    # Validate expected return date
+    while True:
+        expected_return = input("Expected Return Date (YYYY-MM-DD): ").strip()
+        try:
+            booked_date_obj = datetime.strptime(date_booked, "%Y-%m-%d")
+            return_date_obj = datetime.strptime(expected_return, "%Y-%m-%d")
 
---- Available Equipment ---
-1. Laptop A
-2. Laptop B
-3. Projector 1
-4. Projector 2
-5. DSLR Camera 1
-6. DSLR Camera 2
-7. Tripod Stand
-8. Audio Recorder
-9. Microphone Kit
-10. Digital Tablet A
-11. Digital Tablet B
-12. VR Headset
-13. 3D Printer
-14. Scientific Calculator A
-15. Scientific Calculator B
-16. Graphing Tablet
-17. LED Light Panel
-18. Portable Monitor
-19. Bluetooth Keyboard
-20. Portable Hard Drive
+            if return_date_obj < booked_date_obj:
+                print("Expected return date cannot be before booking date.")
+            else:
+                break
+        except ValueError:
+            print("Invalid date format. Please enter the date as YYYY-MM-DD.")
 
-Select equipment number to book: Invalid input. Please enter a number.
+    booking = {
+        "first_name": first,
+        "last_name": last,
+        "booking_id": booking_id,
+        "equipment": selected_item,
+        "date_booked": date_booked,
+        "expected_return": expected_return,
+        "returned": False
+    }
 
-====== BRIGHT MIND Academic Booking System ======
-1. View Equipment
-2. Book Equipment
-3. View All Bookings
-4. Return Equipment
-5. View Late Returns
-6. Exit
-Select an option (1-6): 2
+    bookings.append(booking)
+    save_bookings(bookings)
 
---- Book Equipment ---
+    print("\nEquipment booked successfully!")
+    print(f"Generated Booking ID: {booking_id}")
 
---- Available Equipment ---
-1. Laptop A
-2. Laptop B
-3. Projector 1
-4. Projector 2
-5. DSLR Camera 1
-6. DSLR Camera 2
-7. Tripod Stand
-8. Audio Recorder
-9. Microphone Kit
-10. Digital Tablet A
-11. Digital Tablet B
-12. VR Headset
-13. 3D Printer
-14. Scientific Calculator A
-15. Scientific Calculator B
-16. Graphing Tablet
-17. LED Light Panel
-18. Portable Monitor
-19. Bluetooth Keyboard
-20. Portable Hard Drive
+# --- View Bookings Function ---
+def view_bookings(bookings):
+    print("\n--- All Bookings ---")
+    if not bookings:
+        print("No bookings found.")
+        return
 
-Select equipment number to book: 4
-First Name: mohammed
-Last Name: amin
-Date of Booking (YYYY-MM-DD): 2026-03-20
-Expected Return Date (YYYY-MM-DD): 2026-04-19
+    for b in bookings:
+        status = "Returned" if b["returned"] else "Not Returned"
+        print(f"""
+Booking ID: {b['booking_id']}
+Name: {b['first_name']} {b['last_name']}
+Equipment: {b['equipment']}
+Booked On: {b['date_booked']}
+Expected Return: {b['expected_return']}
+Status: {status}
+""")
 
-Equipment booked successfully!
-Generated Booking ID: BK1BC0F278
+# --- Return Equipment Function ---
+def return_booking(bookings):
+    print("\n--- Return Equipment ---")
+    booking_id = input("Enter Booking ID to return: ").strip()
 
-====== BRIGHT MIND Academic Booking System ======
-1. View Equipment
-2. Book Equipment
-3. View All Bookings
-4. Return Equipment
-5. View Late Returns
-6. Exit
-Select an option (1-6): 3
+    for b in bookings:
+        if b["booking_id"] == booking_id:
+            if b["returned"]:
+                print("This booking has already been returned.")
+                return
+            b["returned"] = True
+            save_bookings(bookings)
+            print("Equipment successfully marked as returned.")
+            return
 
---- All Bookings ---
+    print("Booking ID not found.")
 
-Booking ID: 1
-Name: Mohammed amin
-Equipment: Projector 1
-Booked On: 2026-03-10
-Expected Return: 2026-03-11
-Status: Not Returned
+# --- View Late Returns Function ---
+def view_late_returns(bookings):
+    print("\n--- Late Returns ---")
+    today = datetime.today().date()
+    found = False
 
+    for b in bookings:
+        if not b["returned"]:
+            try:
+                expected = datetime.strptime(b["expected_return"], "%Y-%m-%d").date()
+            except ValueError:
+                print(f"Invalid date format in booking ID {b['booking_id']}")
+                continue
 
-Booking ID: v
-Name: fhgchjvbu vgcgjh
-Equipment: Laptop B
-Booked On: 21345678
-Expected Return: 456
-Status: Not Returned
+            if expected < today:
+                found = True
+                print(f"""
+*** LATE RETURN ***
+Booking ID: {b['booking_id']}
+Name: {b['first_name']} {b['last_name']}
+Equipment: {b['equipment']}
+Expected Return: {b['expected_return']}
+---------------------------
+""")
 
+    if not found:
+        print("No late returns found.")
 
-Booking ID: BK64FFF8C2
-Name: sdv qwerd
-Equipment: Laptop A
-Booked On: 2026-03-10
-Expected Return: 2026-03-11
-Status: Not Returned
+# --- Main Program ---
+def main():
+    bookings = load_bookings()
 
+    while True:
+        print("\n====== RESTART Academic Booking System ======")
+        print("1. View Equipment")
+        print("2. Book Equipment")
+        print("3. View All Bookings")
+        print("4. Return Equipment")
+        print("5. View Late Returns")
+        print("6. Exit")
 
-Booking ID: BK1BC0F278
-Name: mohammed amin
-Equipment: Projector 2
-Booked On: 2026-03-20
-Expected Return: 2026-04-19
-Status: Not Returned
+        choice = input("Select an option (1-6): ").strip()
 
+        if choice == "1":
+            view_equipment()
+        elif choice == "2":
+            book_equipment(bookings)
+        elif choice == "3":
+            view_bookings(bookings)
+        elif choice == "4":
+            return_booking(bookings)
+        elif choice == "5":
+            view_late_returns(bookings)
+        elif choice == "6":
+            print("Exiting system. Goodbye!")
+            break
+        else:
+            print("Invalid choice. Try again.")
 
-====== BRIGHT MIND Academic Booking System ======
-1. View Equipment
-2. Book Equipment
-3. View All Bookings
-4. Return Equipment
-5. View Late Returns
-6. Exit
-Select an option (1-6): 
+if __name__ == "__main__":
+    main()
